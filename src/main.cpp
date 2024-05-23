@@ -13,6 +13,7 @@
 
 using namespace eloq;
 String label;
+String pasta;
 
 /**
  *
@@ -60,7 +61,7 @@ void setup() {
     // - low
     // - high
     // - best
-    camera.quality.high();
+    camera.quality.best();
 
     // init camera
     while (!camera.begin().isOk())
@@ -84,7 +85,7 @@ void loop() {
         return;
 
     label = Serial.readStringUntil('\n');
-    if ( label != "celular" and label != "controle" and label != "pendrive" ) {
+    if ( label != "1" and label != "2" and label != "3" ) {
         Serial.println("objeto inválido");
         return;
     }
@@ -95,7 +96,12 @@ void loop() {
         return;
     }
 
-    if (sdmmc.save(camera.frame).inside(label).to("", "jpg").isOk()){
+    if(label == "1") pasta = "celular";
+    else if (label == "2") pasta = "controle";
+    else if (label == "3") pasta = "pendrive";
+
+
+    if (sdmmc.save(camera.frame).inside(pasta).to("", "jpg").isOk()){
         Serial.print("Imagem salva em ");
         Serial.println(sdmmc.session.lastFilename);
     } else Serial.println(sdmmc.session.exception.toString());
